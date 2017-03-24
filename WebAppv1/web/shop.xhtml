@@ -1,15 +1,62 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      >
     <h:head>
-        <title>Welcome to the shop</title>
+    	<h:outputStylesheet library="css" name="table-style.css"  />
     </h:head>
+
     <h:body>
-	<h:form>
-		<p>Welcome to the store #{login.user}</p>
-		<h:commandLink action="#{login.logout}" value="logout"></h:commandLink>
-	</h:form>
-</h:body>
+
+    	<h1>Shop</h1>
+
+        <h:form>
+                <h:dataTable value="#{product.getCustomerList()}" var="c"
+                    styleClass="order-table"
+                    headerClass="order-table-header"
+                    rowClasses="order-table-odd-row,order-table-even-row"
+            >
+
+                <h:column>
+                        <f:facet name="header">
+                                Product ID
+                        </f:facet>
+                                #{c.id}
+                </h:column>
+
+                <h:column>
+                        <f:facet name="header">
+                                product
+                                </f:facet>
+                                #{c.product}
+                </h:column>
+
+                        <h:column>
+                        <f:facet name="header">
+                                quantity
+                                </f:facet>
+                                #{c.quantity}
+                </h:column>
+
+                <h:column>
+                        <f:facet name="header">
+                                price
+                                </f:facet>
+                                #{c.price}
+                </h:column>
+
+            </h:dataTable>
+        
+        <h:commandButton action="login"
+			value="logout"></h:commandButton>
+            
+        </h:form>
+        
+
+    </h:body>
+
 </html>
 
