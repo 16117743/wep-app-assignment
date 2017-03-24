@@ -14,44 +14,46 @@
     	<h1>Shop</h1>
 
         <h:form>
-                <h:dataTable value="#{product.getCustomerList()}" var="c"
+                <h:dataTable value="#{product.getProductList()}" var="p"
                     styleClass="order-table"
                     headerClass="order-table-header"
                     rowClasses="order-table-odd-row,order-table-even-row"
-            >
+                    >
 
                 <h:column>
                         <f:facet name="header">
                                 Product ID
                         </f:facet>
-                                #{c.id}
+                                #{p.id}
                 </h:column>
 
                 <h:column>
                         <f:facet name="header">
                                 product
                                 </f:facet>
-                                #{c.product}
+                                #{p.product}
                 </h:column>
 
                         <h:column>
                         <f:facet name="header">
                                 quantity
                                 </f:facet>
-                                #{c.quantity}
+                                #{p.quantity}
                 </h:column>
 
                 <h:column>
                         <f:facet name="header">
                                 price
                                 </f:facet>
-                                #{c.price}
+                                #{p.price}
+                </h:column>
+             
+                <h:column>
+                        <f:facet name="header">add to cart</f:facet>
+                        <h:commandButton action="cart" value="add to cart"></h:commandButton>
                 </h:column>
 
             </h:dataTable>
-        
-        <h:commandButton action="login"
-			value="logout"></h:commandButton>
             
         </h:form>
         

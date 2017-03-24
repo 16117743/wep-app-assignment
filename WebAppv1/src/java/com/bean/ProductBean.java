@@ -43,9 +43,15 @@ public class ProductBean implements Serializable{
 		}
 
 	}*/
+        
+        public void test(){
+            System.out.println("TESTING product bean");
+        }
 
 	//connect to DB and get customer list
-	public List<Product> getCustomerList() throws SQLException{
+	public List<Product> getProductList() throws SQLException{
+            
+                
 
 		if(ds==null)
 			throw new SQLException("Can't get data source");

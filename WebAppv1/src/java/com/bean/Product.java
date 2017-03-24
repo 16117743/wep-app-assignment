@@ -5,13 +5,14 @@
  */
 package com.bean;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  *
  * @author tom
  */
-public class Product {
+public class Product implements Serializable {
     private Integer id;
     private String product;
 
