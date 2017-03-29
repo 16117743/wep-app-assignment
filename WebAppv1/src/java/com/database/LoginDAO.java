@@ -5,6 +5,7 @@
  */
 package com.database;
 
+import com.Login;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -50,4 +51,29 @@ public class LoginDAO {
 		}
 		return -1;
 	}
+        
+        public static void changeProfile(Login user)
+        {
+            Connection con = null;
+            PreparedStatement ps = null;
+
+            try 
+            {
+                con = DataConnect.getConnection();
+
+                ps = con.prepareStatement("UPDATE APP.USERS SET MSG = ? WHERE USERNAME = ? AND PW = ?");
+
+                ps.setString(1, user.getMsg());
+                ps.setString(2, user.getUser());
+                ps.setString(3, user.getPwd());
+
+                ps.execute();
+           
+            } catch (SQLException ex) {
+                    System.out.println("Login error -->" + ex.getMessage());
+              
+            } finally {
+                    DataConnect.close(con);
+            }         
+        }
 }

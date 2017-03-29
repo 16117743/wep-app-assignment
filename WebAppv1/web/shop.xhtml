@@ -69,7 +69,7 @@
             
             <h:inputText id="param2" value="#{product.nameParam}"></h:inputText>
             <h:commandButton action="#{product.searchByName()}"
-			value="search by id"></h:commandButton>
+			value="search by name"></h:commandButton>
             <br></br><br></br>
            
             <h:dataTable value="#{product.result}" var="p"
@@ -108,6 +108,12 @@
 
             </h:dataTable>
         </h:form>
+        
+        <h:link outcome="profile" value="View profile"/>
+        
+        <br></br><br></br>
+        
+        <h:link outcome="cart" value="shopping cart"/>
         
     </h:body>
 

@@ -4,4 +4,15 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
 	http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">   
 
+
+    <navigation-rule>
+	<from-view-id>cart</from-view-id>
+	<navigation-case>
+		<from-action>#{sc.checkout()}</from-action>
+		<from-outcome>checkout</from-outcome>
+		<to-view-id>checkout</to-view-id>
+	</navigation-case>
+    </navigation-rule>
+    
+    
 </faces-config>

@@ -8,7 +8,7 @@
     </h:head>
     <h:body>
         <h:form>
-            <h:dataTable value ="#{sc.cart}" var ="i"
+            <h:dataTable id = "dt" value ="#{sc.cart}" var ="i"
                          border="1" cellpadding = "7px" 
                          style= "boarder-collapse: collapse">
             
@@ -23,22 +23,37 @@
                 </h:column>
                 
                 <h:column>
-                    <f:facet name="header">Quantity</f:facet>
+                    <f:facet name="header">Quantity</f:facet>    
                     <h:inputText value="#{i.quantity}" style="width:20px"/>
+                    <h:commandButton value ="update quantity"
+                                     action="#{sc.update()}"/>
                 </h:column>
                 
                 <h:column>
-                    <f:facet name="header">Action</f:facet>
+                    <f:facet name="header">Action</f:facet>     
                     <h:commandButton value ="delete"
                                      action="#{sc.remove(i)}"/>
-                    <h:inputText value="#{i.quantity}" style="width:20px"/>
                 </h:column>
                 
                 <f:facet name="footer">Total: $#{sc.total}</f:facet>
                 
             </h:dataTable>
+            
+            <br></br>
             <h:commandButton value="Update"
-                             action="#{sc.update()}"/>
+                             action="#{sc.update}"/>
+            
+            <br></br>
+            
+            <h:commandButton value="Checkout"
+                             action="#{sc.checkout()}"/>
+            
+            <br></br>
+            
+            <h:commandButton value="Cancel Order"
+                             action="#{sc.cancelOrder()}"/>
+            
+            
         </h:form>
         <h:link outcome="shop" value="Continue shopping"/>
         

@@ -51,7 +51,8 @@ public class Login implements Serializable {
 	}
 
 	//validate login
-	public String validateUsernamePassword() {
+	public String validateUsernamePassword() 
+        {
             try
             {
 		int valid = LoginDAO.validate(user, pwd);
@@ -79,6 +80,12 @@ public class Login implements Serializable {
             }
             return null;
 	}
+        
+        public String updateProfile(){
+            LoginDAO.changeProfile(this);
+            
+            return "";
+        }
 
 	//logout event, invalidate session
 	public String logout() {

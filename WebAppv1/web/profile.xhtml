@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h1>Profiles</h1>
+        <br></br><br></br>
+
+        <h:form>
+                <h:dataTable value="#{profileBean.getProfileList()}" var="p"
+                    styleClass="order-table"
+                    headerClass="order-table-header"
+                    rowClasses="order-table-odd-row,order-table-even-row"
+                    >
+
+                <h:column>
+                        <f:facet name="header">
+                                Profile ID
+                        </f:facet>
+                                #{p.id}
+                </h:column>
+
+                        <h:column>
+                        <f:facet name="header">
+                                Username
+                                </f:facet>
+                                #{p.name}
+                </h:column>
+
+                <h:column>
+                        <f:facet name="header">
+                                Message
+                                </f:facet>
+                                #{p.msg}
+                </h:column>
+                    
+            </h:dataTable>
+            
+        </h:form>
+        
+        <h:form> 
+            <br></br><br></br>
+            <h:inputText id="param1" value="#{profileBean.idParam}"></h:inputText>
+            <h:commandButton action="#{profileBean.searchByID()}"
+			value="search by id"></h:commandButton>
+            
+            <br></br><br></br>
+            
+            <h:inputText id="param2" value="#{profileBean.nameParam}"></h:inputText>
+            <h:commandButton action="#{profileBean.searchByName()}"
+			value="search by name"></h:commandButton>
+            <br></br><br></br>
+           
+            <h:dataTable value="#{profileBean.result}" var="p"
+                    styleClass="order-table"
+                    headerClass="order-table-header"
+                    rowClasses="order-table-odd-row,order-table-even-row"
+                    >
+
+                <h:column>
+                        <f:facet name="header">
+                                Profile ID
+                        </f:facet>
+                                #{p.id}
+                </h:column>
+
+                        <h:column>
+                        <f:facet name="header">
+                                Username
+                                </f:facet>
+                                #{p.name}
+                </h:column>
+
+                <h:column>
+                        <f:facet name="header">
+                                Message
+                                </f:facet>
+                                #{p.msg}
+                </h:column>
+                    
+            </h:dataTable>
+        </h:form>
+        
+        <h:form>
+            <h:inputText id="param2" value="#{login.msg}"></h:inputText>
+            <h:commandButton action="#{login.updateProfile()}"
+			value="edit message"></h:commandButton>
+            
+        </h:form>
+
+        
+        <h:link outcome="shop" value="shop"/>
+    </h:body>
+</html>
+
