@@ -37,6 +37,10 @@ public class ShoppingCart implements Serializable {
     }
 
     public float getTotal() {
+        total =0;
+        for(Item item:cart){
+            total = total = (item.getQuantity()*item.getP().getPrice().floatValue());
+        }
         return total;
     }
 
@@ -61,5 +65,20 @@ public class ShoppingCart implements Serializable {
         i.setP(p);
         cart.add(i);
         return "cart";       
+    }
+    
+    public void update(){
+        //reload page
+    }
+    
+    public void remove(Item i)
+    {
+        for(Item item : cart){
+            if(item.equals(i))
+            {
+                cart.remove(item);
+                break;
+            }
+        }
     }
 }

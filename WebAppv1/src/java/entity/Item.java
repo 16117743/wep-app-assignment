@@ -6,12 +6,13 @@
 package entity;
 
 import com.bean.Product;
+import java.io.Serializable;
 
 /**
  *
  * @author tom
  */
-public class Item {
+public class Item implements Serializable{
     private Product p;
     private int quantity;
 
