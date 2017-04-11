@@ -159,20 +159,24 @@ public class ShoppingCart implements Serializable {
         } 
         catch (SQLException ex)
         {
-                System.out.println("checkout error -->" + ex.getMessage());
-                try
-                {
-                    if(con!=null)
-                        con.rollback();
-                }
-                catch(SQLException se2)
-                {
-                    se2.printStackTrace();
-                }//end try
+            System.out.println("checkout error -->" + ex.getMessage());
+            try
+            {
+                if(con!=null)
+                    con.rollback();
+            }
+            catch(SQLException se2)
+            {
+                se2.printStackTrace();
+            }//end try
         } 
         finally 
         {
-                DataConnect.close(con);
+            DataConnect.close(con);
+            try{
+                con.setAutoCommit(true);
+            }
+            catch(Exception e){}              
         }         
  
         return "checkout";

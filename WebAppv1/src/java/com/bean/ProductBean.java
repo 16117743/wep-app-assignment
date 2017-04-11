@@ -35,28 +35,17 @@ public class ProductBean implements Serializable{
         private DataConnect dc;
         private String idParam = "-1";
         private String nameParam = "-1";
+        private String quantityParam = "-1";
         private Product searchResult;
-
-	//if resource injection is not support, you still can get it manually.
-	/*public CustomerBean(){
-		try {
-			Context ctx = new InitialContext();
-			ds = (DataSource)ctx.lookup("java:comp/env/jdbc/mkyongdb");
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-
-	}*/
+        private Product newProduct;
         
         public void test(){
             System.out.println("TESTING product bean");
         }
 
 	//connect to DB and get customer list
-	public List<Product> getProductList() throws SQLException{
-            
-                
-
+	public List<Product> getProductList() throws SQLException
+        {
 		if(ds==null)
 			throw new SQLException("Can't get data source");
 
@@ -181,7 +170,53 @@ public class ProductBean implements Serializable{
             return "";
           //  return list;
 	}
+        
+        public String updateQuantity(){
+            
+        Connection con = null;
+        PreparedStatement ps = null;
 
+        try{
+            List<Product> productList = getProductList();
+
+            for (Product p: productList)
+            {
+                con = DataConnect.getConnection();
+                con.setAutoCommit(true);
+                ps = con.prepareStatement("UPDATE APP.PRODUCTS SET QUANTITY = ? WHERE ID = ?");
+                
+                System.out.println("testing 1");
+                System.out.println("quantityParam = " + quantityParam);
+                System.out.println("id Param = " + idParam);
+                    
+                if(p.getId().equals(Integer.parseInt(idParam)))
+                {
+                    //System.out.println("updateProduct.getQuantity() = " + updateProduct.getQuantity());
+                   
+                    int updateQuantity = Integer.parseInt(quantityParam);
+                    ps.setInt(1, updateQuantity);
+                    ps.setInt(2, p.getId());
+                    ps.execute();
+                    con.commit();
+                }
+            }  
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    
+            return "";
+        }
+
+    public Product getNewProduct() {
+        return newProduct;
+    }
+
+    public void setNewProduct(Product newProduct) {
+        this.newProduct = newProduct;
+    }
+
+        
 
     public String getIdParam() {
         return idParam;
@@ -207,5 +242,15 @@ public class ProductBean implements Serializable{
 
     public void setResult(Product result) {
         this.searchResult = result;
-    }      
+    }    
+
+    public String getQuantityParam() {
+        return quantityParam;
+    }
+
+    public void setQuantityParam(String quantityParam) {
+        this.quantityParam = quantityParam;
+    }
+    
+    
 }

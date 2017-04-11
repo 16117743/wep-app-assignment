@@ -12,6 +12,11 @@
     <h:body>
 
     	<h1>Shop</h1>
+        
+        <h:form>
+		<p>You are logged in as shop user #{login.user}</p>
+		<h:commandLink action="#{login.logout}" value="logout"></h:commandLink>
+	</h:form>
 
         <h:form>
                 <h:dataTable value="#{product.getProductList()}" var="p"
