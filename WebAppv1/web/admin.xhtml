@@ -51,7 +51,7 @@
                 <h:column>
                     <f:facet name="header">Delete</f:facet>     
                     <h:commandButton value ="delete"
-                                     action="#{sc.remove(i)}"/>
+                                     action="#{product.removeProduct(p)}"/>
                 </h:column>
 
             </h:dataTable>
@@ -88,34 +88,34 @@
                 <h:column>
                     <f:facet name="header">ID</f:facet>
                     ID
-                    <h:inputText value="#{product.newProduct.id}" style="width:50px"/>
+                    <h:inputText value="#{product.idParam}" style="width:50px"/>
                     
                 </h:column>
             
                 <h:column>
                     <f:facet name="header">Product</f:facet>
                     Product
-                    <h:inputText value="#{product.newProduct.product}" style="width:50px"/>
+                    <h:inputText value="#{product.nameParam}" style="width:50px"/>
                     
                 </h:column>
                 
                 <h:column>
                     <f:facet name="header">Price</f:facet>
                     Price
-                    <h:inputText value="#{product.newProduct.price}" style="width:50px"/>
+                    <h:inputText value="#{product.priceParam}" style="width:50px"/>
                 </h:column>
                 
                 <h:column>
                     <f:facet name="header">Quantity</f:facet> 
                     Quantity
-                    <h:inputText value="#{product.newProduct.quantity}" style="width:50px"/>
+                    <h:inputText value="#{product.quantityParam}" style="width:50px"/>
                 </h:column>
                 
                 <h:column>
                     <f:facet name="header">Add</f:facet>
                     Add
                     <h:commandButton value ="Add"
-                                     action="#{sc.remove(i)}"/>
+                                     action="#{product.addNewProduct()}"/>
                 </h:column>            
             
         </h:form>

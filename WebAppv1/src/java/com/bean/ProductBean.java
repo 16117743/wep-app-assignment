@@ -23,7 +23,10 @@ import javax.sql.DataSource;
 
 import com.bean.Product;
 import com.database.DataConnect;
+import java.math.BigDecimal;
+
 import javax.faces.bean.RequestScoped;
+import org.apache.log4j.Logger;
 
 @ManagedBean(name="product")
 @RequestScoped
@@ -36,8 +39,10 @@ public class ProductBean implements Serializable{
         private String idParam = "-1";
         private String nameParam = "-1";
         private String quantityParam = "-1";
+        private String priceParam = "-1";
         private Product searchResult;
         private Product newProduct;
+        final static Logger logger = Logger.getLogger(ProductBean.class);
         
         public void test(){
             System.out.println("TESTING product bean");
@@ -45,7 +50,7 @@ public class ProductBean implements Serializable{
 
 	//connect to DB and get customer list
 	public List<Product> getProductList() throws SQLException
-        {
+        {    
 		if(ds==null)
 			throw new SQLException("Can't get data source");
 
@@ -207,6 +212,65 @@ public class ProductBean implements Serializable{
     
             return "";
         }
+        
+    public String addNewProduct(){
+        
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        try{
+            List<Product> productList = getProductList();
+
+            for (Product p: productList)
+            {
+                con = DataConnect.getConnection();
+                con.setAutoCommit(true);
+                ps = con.prepareStatement("INSERT INTO APP.PRODUCTS (ID, PRODUCT, QUANTITY, PRICE) VALUES (?,?,?,?)");
+                
+                int id = Integer.parseInt(idParam);
+                ps.setInt(1, id);
+                ps.setString(2, nameParam);
+                ps.setInt(3, Integer.parseInt(quantityParam));
+                //int value = Integer.parseInt(priceParam);
+                double val = Double.parseDouble(priceParam);
+                ps.setDouble(4, val);
+                ps.execute();
+                con.commit();   
+                
+                logger.info("Product : " + nameParam + " added to inventory");
+            }  
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return "";
+    }
+    
+    public String removeProduct(Product removed){
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        try
+        {
+            con = DataConnect.getConnection();
+            con.setAutoCommit(true);
+            ps = con.prepareStatement("DELETE FROM APP.PRODUCTS WHERE ID =?");
+
+            int id = removed.getId();
+            ps.setInt(1, id);     
+            ps.execute();
+            con.commit();   
+
+            logger.info("Product : " + removed.getProduct() + " removed from inventory");
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return "";
+    }
 
     public Product getNewProduct() {
         return newProduct;
@@ -251,6 +315,13 @@ public class ProductBean implements Serializable{
     public void setQuantityParam(String quantityParam) {
         this.quantityParam = quantityParam;
     }
-    
+
+    public String getPriceParam() {
+        return priceParam;
+    }
+
+    public void setPriceParam(String priceParam) {
+        this.priceParam = priceParam;
+    } 
     
 }

@@ -129,9 +129,7 @@ public class ShoppingCart implements Serializable {
                 System.out.println("inStoreQuantity = " + inStoreQuantity);
                 
                 if(inStoreQuantity >= item.getQuantity())
-                {
-                    System.out.println("TRUE!");
-                    
+                {      
                     try
                     {
                         ps = con.prepareStatement("UPDATE APP.PRODUCTS SET QUANTITY = ? WHERE ID = ?");
@@ -226,6 +224,10 @@ public class ShoppingCart implements Serializable {
     }
     
     public String cancelOrder(){
+        return "";
+    }
+    
+    public String confirmOrder(){
         return "";
     }
 }
