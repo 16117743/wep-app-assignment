@@ -6,6 +6,7 @@
     <properties>
         <property name="javax.persistence.jdbc.user" value="a"/>
         <property name="javax.persistence.jdbc.password" value="a"/>
+        <property name="eclipselink.logging.level" value="FINEST"/>
     </properties>
   </persistence-unit>
 </persistence>

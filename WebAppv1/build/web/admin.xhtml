@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
 	<title>Facelet Title</title>
 </h:head>
@@ -11,6 +12,113 @@
 		<p>You are logged in as admin #{login.user}</p>
 		<h:commandLink action="#{login.logout}" value="logout"></h:commandLink>
 	</h:form>
+    
+        <h:form>
+                <h:dataTable value="#{product.getProductList()}" var="p"
+                    styleClass="order-table"
+                    headerClass="order-table-header"
+                    rowClasses="order-table-odd-row,order-table-even-row"
+                    >
+
+                <h:column>
+                        <f:facet name="header">
+                                Product ID
+                        </f:facet>
+                                #{p.id}
+                </h:column>
+
+                <h:column>
+                        <f:facet name="header">
+                                product
+                                </f:facet>
+                                #{p.product}
+                </h:column>
+
+                        <h:column>
+                        <f:facet name="header">
+                                quantity
+                                </f:facet>
+                                #{p.quantity}
+                </h:column>
+
+                <h:column>
+                        <f:facet name="header">
+                                price
+                                </f:facet>
+                                #{p.price}
+                </h:column>
+                    
+                <h:column>
+                    <f:facet name="header">Delete</f:facet>     
+                    <h:commandButton value ="delete"
+                                     action="#{product.removeProduct(p)}"/>
+                </h:column>
+
+            </h:dataTable>
+            
+            </h:form>
+            
+            <br></br> <br></br>
+            
+            <h:form> 
+                
+                <p>Enter id and quantity of product to update</p>
+
+                <br></br> <br></br>
+                
+                <f:facet name="header">
+                                Product ID
+                        </f:facet>
+                                Product ID
+                                
+                <h:inputText id="param0" value="#{product.idParam}"></h:inputText> 
+                
+                <f:facet name="header">
+                                quantity
+                        </f:facet>
+                                quantity
+                <h:inputText id="param1" value="#{product.quantityParam}"></h:inputText>
+                <h:commandButton action="#{product.updateQuantity()}"
+			value="update quantity"></h:commandButton>
+            </h:form>
+            
+            <br></br><br></br>
+
+             <h:form>
+                <h:column>
+                    <f:facet name="header">ID</f:facet>
+                    ID
+                    <h:inputText value="#{product.idParam}" style="width:50px"/>
+                    
+                </h:column>
+            
+                <h:column>
+                    <f:facet name="header">Product</f:facet>
+                    Product
+                    <h:inputText value="#{product.nameParam}" style="width:50px"/>
+                    
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">Price</f:facet>
+                    Price
+                    <h:inputText value="#{product.priceParam}" style="width:50px"/>
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">Quantity</f:facet> 
+                    Quantity
+                    <h:inputText value="#{product.quantityParam}" style="width:50px"/>
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">Add</f:facet>
+                    Add
+                    <h:commandButton value ="Add"
+                                     action="#{product.addNewProduct()}"/>
+                </h:column>            
+            
+        </h:form>
 </h:body>
 </html>
 

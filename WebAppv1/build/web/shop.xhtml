@@ -1,15 +1,126 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      >
     <h:head>
-        <title>Welcome to the shop</title>
+    	<h:outputStylesheet library="css" name="table-style.css"  />
     </h:head>
+
     <h:body>
-	<h:form>
-		<p>Welcome to the store #{login.user}</p>
+
+    	<h1>Shop</h1>
+        
+        <h:form>
+		<p>You are logged in as shop user #{login.user}</p>
 		<h:commandLink action="#{login.logout}" value="logout"></h:commandLink>
 	</h:form>
-</h:body>
+
+        <h:form>
+                <h:dataTable value="#{product.getProductList()}" var="p"
+                    styleClass="order-table"
+                    headerClass="order-table-header"
+                    rowClasses="order-table-odd-row,order-table-even-row"
+                    >
+
+                <h:column>
+                        <f:facet name="header">
+                                Product ID
+                        </f:facet>
+                                #{p.id}
+                </h:column>
+
+                <h:column>
+                        <f:facet name="header">
+                                product
+                                </f:facet>
+                                #{p.product}
+                </h:column>
+
+                        <h:column>
+                        <f:facet name="header">
+                                quantity
+                                </f:facet>
+                                #{p.quantity}
+                </h:column>
+
+                <h:column>
+                        <f:facet name="header">
+                                price
+                                </f:facet>
+                                #{p.price}
+                </h:column>
+             
+                <h:column>
+                        <f:facet name="header">add to cart</f:facet>
+                        <h:commandButton action="#{sc.addtocart(p)}"
+			value="add to cart"></h:commandButton>
+                </h:column>
+
+            </h:dataTable>
+            
+        </h:form>
+        
+        
+        <h:form> 
+            <br></br><br></br>
+            <h:inputText id="param1" value="#{product.idParam}"></h:inputText>
+            <h:commandButton action="#{product.searchByID()}"
+			value="search by id"></h:commandButton>
+            
+            <br></br><br></br>
+            
+            <h:inputText id="param2" value="#{product.nameParam}"></h:inputText>
+            <h:commandButton action="#{product.searchByName()}"
+			value="search by name"></h:commandButton>
+            <br></br><br></br>
+           
+            <h:dataTable value="#{product.result}" var="p"
+                    styleClass="order-table"
+                    headerClass="order-table-header"
+                    rowClasses="order-table-odd-row,order-table-even-row"
+                    >
+
+                <h:column>
+                        <f:facet name="header">
+                                Product ID
+                        </f:facet>
+                                #{p.id}
+                </h:column>
+
+                <h:column>
+                        <f:facet name="header">
+                                product
+                                </f:facet>
+                                #{p.product}
+                </h:column>
+
+                        <h:column>
+                        <f:facet name="header">
+                                quantity
+                                </f:facet>
+                                #{p.quantity}
+                </h:column>
+
+                <h:column>
+                        <f:facet name="header">
+                                price
+                                </f:facet>
+                                #{p.price}
+                </h:column>
+
+            </h:dataTable>
+        </h:form>
+        
+        <h:link outcome="profile" value="View profile"/>
+        
+        <br></br><br></br>
+        
+        <h:link outcome="cart" value="shopping cart"/>
+        
+    </h:body>
+
 </html>
 

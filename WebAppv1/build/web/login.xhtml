@@ -7,7 +7,7 @@
 </h:head>
 <h:body>
 	<h:form>
-		<h3>JSF Login </h3>
+		<h3>JSF Login login</h3>
 		<h:outputText value="Username" />
 		<h:inputText id="username" value="#{login.user}"></h:inputText>
 		<h:message for="username"></h:message>
@@ -21,17 +21,17 @@
 		<h:commandButton action="#{login.validateUsernamePassword}"
 			value="Login"></h:commandButton>
                 
-                <h:commandButton action="View"
-			value="View"></h:commandButton>
+                <h:commandButton action="shop"
+			value="shop"></h:commandButton>
+                
+                <h:commandButton action="cart"
+			value="cart"></h:commandButton>
+                
+                <h:commandButton action="#{sc.test()}"
+			value="test cart"></h:commandButton>
 	</h:form>
 </h:body>
     
-    <body>
-        <form action = "reg" method =" "
-        <table>
-             <tr><th>test 1</tr>
-            
-        </table>
-       
-    </body>
+    <h:link outcome="profile" value="View profile"/>
+
 </html>
