@@ -9,7 +9,7 @@ import com.bean.Product;
 import java.io.Serializable;
 
 /**
- *
+ * Class used to store a product object and a quantity attribute
  * @author tom
  */
 public class Item implements Serializable{

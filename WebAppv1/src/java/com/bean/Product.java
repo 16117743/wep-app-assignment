@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- *
+ * Class used to store the attributes of a product
  * @author tom
  */
 public class Product implements Serializable {

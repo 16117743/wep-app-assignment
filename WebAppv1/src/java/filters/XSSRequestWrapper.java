@@ -15,6 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.Part;
 
+/**
+ * Class used to strip common XSS attacks out of the http header using "stripXSS" method.
+ * @author tom
+ */
 public class XSSRequestWrapper extends HttpServletRequestWrapper {
 
     public XSSRequestWrapper(HttpServletRequest servletRequest) {

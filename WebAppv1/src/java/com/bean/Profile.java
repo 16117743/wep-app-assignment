@@ -8,7 +8,7 @@ package com.bean;
 import java.io.Serializable;
 
 /**
- *
+ * Class used to store the attributes of a profile
  * @author tom
  */
 public class Profile implements Serializable {

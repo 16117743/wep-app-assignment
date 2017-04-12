@@ -16,7 +16,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- *
+ * Class used to create a XSSRequestWrapper whenever doFilter method is called.
  * @author tom
  */
 @WebFilter(filterName = "XssFilter", urlPatterns = { "*.xhtml" })

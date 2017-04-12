@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 
 
 /**
- * 
+ * Class used to authorize a user to access pages other than login.xhtml
  * @author tom
  */
 @WebFilter(filterName = "AuthFilter", urlPatterns = { "*.xhtml" })
@@ -50,7 +50,7 @@ public class AuthorizationFilter implements Filter {
 					|| (ses != null && ses.getAttribute("username") != null)
 					|| reqURI.indexOf("/public/") >= 0
 					|| reqURI.contains("javax.faces.resource"))
-				chain.doFilter(request, response); //send request and response to authorization and xss filter
+				chain.doFilter(request, response); //send request and response to filter
 			else
 				resp.sendRedirect(reqt.getContextPath() + "/faces/login.xhtml");//redirect user to login page
 		} catch (Exception e) {

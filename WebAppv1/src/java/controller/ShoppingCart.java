@@ -24,60 +24,28 @@ import javax.faces.context.FacesContext;
 import org.apache.log4j.Logger;
 
 /**
- *
+ * Class used to handle Shopping cart functionality
  * @author tom
  */
-@ManagedBean(name = "sc")
-@SessionScoped
-public class ShoppingCart implements Serializable {
-    private List<Item> cart = new ArrayList<Item>();
-    private float total;
-    private DataConnect dc;
-    private String checkout = "success";
-    final static Logger logger = Logger.getLogger(ShoppingCart.class);
+@ManagedBean(name = "sc") //"sc" used to refer to bean in xhtml file 
+@SessionScoped // scope set to session
+public class ShoppingCart implements Serializable 
+{
+    private List<Item> cart = new ArrayList<Item>();//stores the items in the cart
+    private float total; //stores total price of items in cart
+    private DataConnect dc;//used to obtain a connection to the database
+    private String checkout = "success";//redirect user to checkout page
+    final static Logger logger = Logger.getLogger(ShoppingCart.class);//used to write to the log when a user confirms or cancels and order
 
-    public List<Item> getCart() {
-        return cart;
-    }
-
-    public void setCart(List<Item> cart) {
-        System.out.println("TESTING cart!!!");
-        this.cart = cart;
-    }
-    
-    public void test() {
-        System.out.println("TESTING cart!!!");
-    }
-
-    public float getTotal() {
-        total =0;
-        for(Item item:cart){
-            System.out.println("Item ID in cart = " + item.getP().getId());
-            System.out.println("Item price in cart = " + item.getP().getPrice());
-            total = total + (item.getQuantity()*item.getP().getPrice().floatValue());
-        }
-        return total;
-    }
-
-    public void setTotal(float total) {
-        this.total = total;
-    }
-
-    public String getCheckout() {
-        return checkout;
-    }
-
-    public void setCheckout(String checkout) {
-        this.checkout = checkout;
-    }
-
-    
-
+    /**
+     * Used to add a product to the cart
+     * @param p the product
+     * @return redirect user to the cart.xtml
+     */
     public String addtocart(Product p)
     {
-        //Increment quantity if Duplicate product
         for (Item item: cart){
-            if(item.getP().getId() == p.getId())
+            if(item.getP().getId() == p.getId())//Increment quantity if Duplicate product
             {
                 item.setQuantity(item.getQuantity()+1);
                 return "cart";
@@ -88,13 +56,20 @@ public class ShoppingCart implements Serializable {
         i.setQuantity(1);
         i.setP(p);
         cart.add(i);
-        return "cart";       
+        return "cart";//redirect to cart.xtml page  
     }
     
+    /**
+     * used to update the user on total price of items in cart
+     */
     public void update(){
         getTotal();
     }
     
+    /**
+     * used to remove an item from the cart
+     * @param i the item to be removed
+     */
     public void remove(Item i)
     {
         for(Item item : cart){
@@ -106,6 +81,10 @@ public class ShoppingCart implements Serializable {
         }
     }
     
+    /**
+     * used to checkout, verifies that there is enough items in stock
+     * @return 
+     */
     public String checkout()
     {
         Connection con = null;
@@ -113,45 +92,40 @@ public class ShoppingCart implements Serializable {
 
         try 
         {
-            con = DataConnect.getConnection();
-            con.setAutoCommit(false);
+            con = DataConnect.getConnection();//obtain connection
+            con.setAutoCommit(false);//set auto cmmit to false
             
-            for(Item item : cart)
+            for(Item item : cart) //for each item in the cart
             {
                 //A1: Injection prevention using prepared statement
-                ps = con.prepareStatement("select * from app.products where ID = ?");           
-                ps.setInt(1, item.getP().getId());        
-		ResultSet result =  ps.executeQuery();
+                ps = con.prepareStatement("select * from app.products where ID = ?");//select products with matching id           
+                ps.setInt(1, item.getP().getId()); //set param for query       
+		ResultSet result =  ps.executeQuery();//execute query
                 int inStoreQuantity = -1;
                 
-                System.out.println("item.getP().getId() = " + item.getP().getId());
-                System.out.println("item.getQuantity() = " + item.getQuantity());
-                System.out.println("inStoreQuantity = " + inStoreQuantity);
-                
 		if(result.next()) 
-                    inStoreQuantity =  result.getInt("QUANTITY");
-   
-                System.out.println("inStoreQuantity = " + inStoreQuantity);
+                    inStoreQuantity =  result.getInt("QUANTITY");//update in store quantity from database
                 
-                if(inStoreQuantity >= item.getQuantity())
+                if(inStoreQuantity >= item.getQuantity()) //if there is enough quantity for given item
                 {      
                     try
                     {
-                        return "checkout";    
+                        return "checkout";//redirect user to checkout.xhtml
                     }
                     catch (Exception ex)
                     {
                        ex.printStackTrace();
                     }
                 }
-                else{
-                    FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_WARN,
-							"Please select a lower quantity in order to checkout",
-							""));
-                    return "";
-                    }
+                else // else tell user to select lower quantity
+                {
+                FacesContext.getCurrentInstance().addMessage(
+                                    null,
+                                    new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                                    "Please select a lower quantity in order to checkout",
+                                                    ""));
+                return "";//no page redirection
+                }
             }
         } 
         catch (SQLException ex)
@@ -169,7 +143,7 @@ public class ShoppingCart implements Serializable {
         } 
         finally 
         {
-            DataConnect.close(con);
+            DataConnect.close(con);//close connection to database
             try{
                 con.setAutoCommit(true);
             }
@@ -179,6 +153,12 @@ public class ShoppingCart implements Serializable {
         return "checkout";
     }
     
+    
+    /**
+     * Used to validate the quantity of items in db against shopping cart
+     * @param item
+     * @return 
+     */
     public Boolean validateQuantity(Item item)
     {
         Connection con = null;
@@ -223,38 +203,47 @@ public class ShoppingCart implements Serializable {
         return true;
     }
     
+    
+    /**
+     * used to cancel an order
+     * @param customer
+     * @return 
+     */
     public String cancelOrder(String customer){
-        logger.info("Customer : " + customer + " cancelled their order");   
+        logger.info("Customer : " + customer + " cancelled their order");//update log that user has cancelled an order   
         
-        return "cancelorder";
+        return "cancelorder";//redirect to cancelorder.xhtml
     }
     
+    
+    /**
+     * used to confirm the order, entry added to order entry table
+     * @param customer
+     * @return 
+     */
     public String confirmOrder(String customer)
-    {
-        logger.info("User : confirmed order ");
-        
+    {    
         Connection con = null;
         PreparedStatement ps = null;
 
         try
         {
-            con = DataConnect.getConnection();
-            con.setAutoCommit(true);
+            con = DataConnect.getConnection();//obtain connection
+            con.setAutoCommit(true);//set to true
             //A1: Injection prevention using prepared statement
-            ps = con.prepareStatement("INSERT INTO APP.ORDERS (CUSTOMER, COST, ORDERID) VALUES (?,?,?)");
+            ps = con.prepareStatement("INSERT INTO APP.ORDERS (CUSTOMER, COST, ORDERID) VALUES (?,?,?)");//insert into table an order entry
 
-            ps.setString(1, customer);
+            ps.setString(1, customer);//set param for statement
             double totalPrice = getTotal();
-            ps.setDouble(2, totalPrice);
-            int orderID = ThreadLocalRandom.current().nextInt(1, 10000 + 1);
-            ps.setInt(3, orderID);
-            ps.execute();
-            con.commit();   
+            ps.setDouble(2, totalPrice);//set param for statement
+            int orderID = ThreadLocalRandom.current().nextInt(1, 10000 + 1);//generate a random id in range 1 - 10000
+            ps.setInt(3, orderID);//set param for statement
+            ps.execute();//execute statemet
+            con.commit();//commit to db
 
-            logger.info("Customer : " + customer + " confirmed their order");   
+            logger.info("Customer : " + customer + " confirmed their order"); // update log that user confirmed order
         }
         catch(Exception e){
-            System.out.println("test here");
             e.printStackTrace();
         }
         
@@ -264,49 +253,43 @@ public class ShoppingCart implements Serializable {
         {
             con = DataConnect.getConnection();
             con.setAutoCommit(false);
-            //ps = con.prepareStatement("UPDATE APP.PRODUCTS SET QUANTITY = ? WHERE ID = ?");
             
             for(Item item : cart)
             {
-                ps = con.prepareStatement("select * from app.products where ID = ?");           
-                ps.setInt(1, item.getP().getId());        
-		ResultSet result =  ps.executeQuery();
+                ps = con.prepareStatement("select * from app.products where ID = ?");//get all products that have matching id         
+                ps.setInt(1, item.getP().getId());//set param for statemnet
+		ResultSet result =  ps.executeQuery();//execute Query
                 int inStoreQuantity = -1;
                 
-                System.out.println("item.getP().getId() = " + item.getP().getId());
-                System.out.println("item.getQuantity() = " + item.getQuantity());
-                System.out.println("inStoreQuantity = " + inStoreQuantity);
-                
 		if(result.next()) 
-                    inStoreQuantity =  result.getInt("QUANTITY");
-   
-                System.out.println("inStoreQuantity = " + inStoreQuantity);
+                    inStoreQuantity =  result.getInt("QUANTITY");//get instore quantity from db
                 
-                if(inStoreQuantity >= item.getQuantity())
+                if(inStoreQuantity >= item.getQuantity())//verify quantity of item before commiting to database
                 {      
                     try
                     {
-                        ps = con.prepareStatement("UPDATE APP.PRODUCTS SET QUANTITY = ? WHERE ID = ?");
-                        int updateQuantity = inStoreQuantity - item.getQuantity();
-                        ps.setInt(1, updateQuantity);
-                        ps.setInt(2, item.getP().getId());
-                        ps.execute();
-                        con.commit();
-                        return "final";    
+                        ps = con.prepareStatement("UPDATE APP.PRODUCTS SET QUANTITY = ? WHERE ID = ?");//update products quantity where id matches
+                        int updateQuantity = inStoreQuantity - item.getQuantity(); //update quantity is the difference between inStoreQuantity - selected item quantity
+                        ps.setInt(1, updateQuantity);//set param
+                        ps.setInt(2, item.getP().getId());//set param
+                        ps.execute();//execute
+                        con.commit();//commit to db
+                        return "final"; //redirect to final.xhtml   
                     }
                     catch (SQLException ex)
                     {
                        ex.printStackTrace();
                     }
                 }
-                else{
-                    FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_WARN,
-							"Please select a lower quantity in order to checkout",
-							""));
-                    return "";
-                    }
+                else
+                {
+                FacesContext.getCurrentInstance().addMessage(
+                                    null,
+                                    new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                                    "Please select a lower quantity in order to checkout",
+                                                    ""));
+                return "";
+                }
             }
         } 
         catch (SQLException ex)
@@ -332,6 +315,41 @@ public class ShoppingCart implements Serializable {
         }         
         
         
-        return "";
+        return ""; //no page redirect
+    }
+    
+    public void setCart(List<Item> cart) {
+    this.cart = cart;
+    }
+        
+         public List<Item> getCart() {
+        return cart;
+    }
+
+
+
+    public float getTotal() 
+    {
+        total =0;
+        for(Item item:cart){
+            total = total + (item.getQuantity()*item.getP().getPrice().floatValue());
+        }
+        return total;
+    }
+
+    public void setTotal(float total) {
+        this.total = total;
+    }
+
+    public String getCheckout() {
+        return checkout;
+    }
+
+    public void setCheckout(String checkout) {
+        this.checkout = checkout;
+    }
+
+    public void test() {
+        System.out.println("TESTING cart!!!");
     }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.bean;
 
 import com.Login;
@@ -28,11 +23,15 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import org.apache.log4j.Logger;
 
-@ManagedBean(name="product")
-@RequestScoped
-public class ProductBean implements Serializable{
 
-    
+/**
+ * Class performs considerable product functionality for both the customer and the admin.
+ * @author tom
+ */
+@ManagedBean(name="product") // bean is refered to as "product" in xhtml files 
+@RequestScoped // scope is set to request
+public class ProductBean implements Serializable
+{
     @Resource(name="jdbc/users")//resource injection
     private DataSource ds; //Used as a DataseSource object
     private DataConnect dc; //Used to obtain a connection to the database
@@ -82,7 +81,7 @@ public class ProductBean implements Serializable{
     
     /**
      * Finds a product based on id
-     * @return
+     * @return no page redirection
      * @throws SQLException 
      */
     public String searchByID() throws SQLException
@@ -127,7 +126,7 @@ public class ProductBean implements Serializable{
 
     /**
      * Finds a product based on product name
-     * @return
+     * @return no page redirection
      * @throws SQLException 
      */
     public String searchByName() throws SQLException

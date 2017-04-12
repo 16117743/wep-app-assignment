@@ -13,13 +13,18 @@ import java.sql.SQLException;
 
 import com.database.DataConnect;
 
+
+/**
+ * Class used to verify username and password
+ * @author tom
+ */
 public class LoginDAO {
 
     /**
-     * Class used to verify username and password
-     * @param user
-     * @param password
-     * @return 
+     * Function used to validate username and password
+     * @param user username
+     * @param password password
+     * @return error code 2= admin, 1= customer, -1 incorrect login
      */
     public static int validate(String user, String password) 
     {
@@ -66,21 +71,21 @@ public class LoginDAO {
 
         try 
         {
-            con = DataConnect.getConnection();
+            con = DataConnect.getConnection();//obtain connection to database
 
-            ps = con.prepareStatement("UPDATE APP.USERS SET MSG = ? WHERE USERNAME = ? AND PW = ?");
+            ps = con.prepareStatement("UPDATE APP.USERS SET MSG = ? WHERE USERNAME = ? AND PW = ?");//update msg field of user with associated name and pw
 
-            ps.setString(1, user.getMsg());
-            ps.setString(2, user.getUser());
-            ps.setString(3, user.getPwd());
+            ps.setString(1, user.getMsg());//set param for query
+            ps.setString(2, user.getUser());//set param for query
+            ps.setString(3, user.getPwd());//set param for query
 
-            ps.execute();
+            ps.execute();//execute query
 
         } catch (SQLException ex) {
                 System.out.println("Login error -->" + ex.getMessage());
 
         } finally {
-                DataConnect.close(con);
+                DataConnect.close(con);//close connection to db
         }         
     }
 }
