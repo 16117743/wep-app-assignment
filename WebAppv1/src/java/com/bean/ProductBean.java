@@ -13,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.Resource;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -21,12 +20,10 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-
 import com.bean.Product;
 import com.database.DataConnect;
 import java.math.BigDecimal;
 import javax.faces.application.FacesMessage;
-
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import org.apache.log4j.Logger;
@@ -35,60 +32,56 @@ import org.apache.log4j.Logger;
 @RequestScoped
 public class ProductBean implements Serializable{
 
-    //resource injection
-    @Resource(name="jdbc/users")
-    private DataSource ds;
-    private DataConnect dc;
-    private String idParam = "-1";
-    private String nameParam = "-1";
-    private String quantityParam = "-1";
-    private String priceParam = "-1";
-    private Product searchResult;
-    private Product newProduct;
-    final static Logger logger = Logger.getLogger(ProductBean.class);
+    
+    @Resource(name="jdbc/users")//resource injection
+    private DataSource ds; //Used as a DataseSource object
+    private DataConnect dc; //Used to obtain a connection to the database
+    private String idParam = "-1";//used to store product id user entered
+    private String nameParam = "-1";//used to store name of product user entered
+    private String quantityParam = "-1";//used to store product quantity user entered
+    private String priceParam = "-1";//used to store product price user entered
+    private Product searchResult; // used to store attributes of the found product
+    private Product newProduct; // used  to store attributes of the newly added product
+    final static Logger logger = Logger.getLogger(ProductBean.class); //used to write to the log found in the DIR: /home//logfile
 
-    public void test(){
-        System.out.println("TESTING product bean");
-    }
-
-    //connect to DB and get customer list
+    /**
+     * connect to DB and get customer list
+     * @return list of products
+     * @throws SQLException 
+     */
     public List<Product> getProductList() throws SQLException
     {    
         if(ds==null)
             throw new SQLException("Can't get data source");
 
         //get database connection
-        Connection con = dc.getConnection();
+        Connection con = dc.getConnection();//obtain connection to db
 
         if(con==null)
-            throw new SQLException("Can't get database connection");
+            throw new SQLException("Can't get database connection");//throw SQL connection if connection is null
 
-        PreparedStatement ps = con.prepareStatement(
-                   "select * from app.products");
+        PreparedStatement ps = con.prepareStatement("select * from app.products");//prepared statement used to prevent SQL injection  
+        ResultSet result =  ps.executeQuery();//get customer data from database
 
-        //get customer data from database
-        ResultSet result =  ps.executeQuery();
+        List<Product> list = new ArrayList<Product>(); //list to hold products
 
-        List<Product> list = new ArrayList<Product>();
-
-        while(result.next())
+        while(result.next()) //while results set has a next result
         {
-            Product product = new Product();
+            Product product = new Product(); //create product bean
 
-            product.setId(result.getInt("ID"));
-            product.setPrice(result.getBigDecimal("PRICE"));
-            product.setProduct(result.getString("PRODUCT"));
-            product.setQuantity(result.getInt("QUANTITY"));
+            product.setId(result.getInt("ID"));//set id attribute
+            product.setPrice(result.getBigDecimal("PRICE"));//set price attribute
+            product.setProduct(result.getString("PRODUCT"));//set productname attribute
+            product.setQuantity(result.getInt("QUANTITY"));//set quantity attribute
 
-            //store all data into a List
-            list.add(product);
+            list.add(product);//add bean to list
         }
 
-        return list;
+        return list;//return the list of products
     }
     
     /**
-     * 
+     * Finds a product based on id
      * @return
      * @throws SQLException 
      */
@@ -98,45 +91,42 @@ public class ProductBean implements Serializable{
         if(idParam.equalsIgnoreCase("-1") == false)
         {
             if(ds==null)
-                    throw new SQLException("Can't get data source");
+                    throw new SQLException("Can't get data source");//throw SQL connection if ds is null
 
             //get database connection
-            Connection con = dc.getConnection();
+            Connection con = dc.getConnection();//obtain connection to db
 
             if(con==null)
-                    throw new SQLException("Can't get database connection");
+                    throw new SQLException("Can't get database connection");//throw SQL connection if connection is null
+  
+            PreparedStatement ps = con.prepareStatement("select * from app.products where id = ?");//A1: Injection prevention using prepared statement
 
-            //A1: Injection prevention using prepared statement
-            PreparedStatement ps
-                    = con.prepareStatement(
-                       "select * from app.products where id = ?");
+            ps.setInt(1, Integer.parseInt(idParam));//set parameter for query
 
-            ps.setInt(1, Integer.parseInt(idParam));
+            ResultSet result =  ps.executeQuery();//store result in resultset
 
-            ResultSet result =  ps.executeQuery();
+            List<Product> list = new ArrayList<Product>(); //list to hold products
 
-            List<Product> list = new ArrayList<Product>();
+            while(result.next()) //while results set has a next result
+            {
+                Product product = new Product(); //create product bean
 
-            while(result.next()){
-                    Product product = new Product();
+                product.setId(result.getInt("ID"));//set id attribute
+                product.setPrice(result.getBigDecimal("PRICE"));//set price attribute
+                product.setProduct(result.getString("PRODUCT"));//set productname attribute
+                product.setQuantity(result.getInt("QUANTITY"));//set quantity attribute
 
-                    product.setId(result.getInt("ID"));
-                    product.setPrice(result.getBigDecimal("PRICE"));
-                    product.setProduct(result.getString("PRODUCT"));
-                    product.setQuantity(result.getInt("QUANTITY"));
-
-                    //store all data into a List
-                    list.add(product);
+                list.add(product);//add bean to list
             }
 
-            searchResult = list.get(0);
+            searchResult = list.get(0);//get 1 product from the list
         }
-        return "";
+        return "";//no page redirection
       //  return list;
     }
 
     /**
-     * 
+     * Finds a product based on product name
      * @return
      * @throws SQLException 
      */
@@ -144,45 +134,41 @@ public class ProductBean implements Serializable{
     {
         System.out.println("TESTING  searchByName() ");
 
-        if(idParam.equalsIgnoreCase("-1") == false)
+        if(idParam.equalsIgnoreCase("-1") == false)//if user has entered a parameter
         {
             if(ds==null)
-                    throw new SQLException("Can't get data source");
+                    throw new SQLException("Can't get data source");//throw SQL connection if ds is null
 
             //get database connection
-            Connection con = dc.getConnection();
+            Connection con = dc.getConnection();//obtain connection to db
 
             if(con==null)
-                    throw new SQLException("Can't get database connection");
+                    throw new SQLException("Can't get database connection");//throw SQL connection if connection is null
 
             //A1: Injection prevention using prepared statement
-            PreparedStatement ps
-                    = con.prepareStatement(
-                       "select * from app.products where product = ?");
+            PreparedStatement ps= con.prepareStatement("select * from app.products where product = ?");//select all product where name is ?
 
-            //get customer data from database 
-            //ps.setInt(1, Integer.parseInt(idParam));
-            ps.setString(1, nameParam);
+            ps.setString(1, nameParam);//set parameter for query
 
-            ResultSet result =  ps.executeQuery();
+            ResultSet result =  ps.executeQuery();//execute query
 
             List<Product> list = new ArrayList<Product>();
 
-            while(result.next()){
-                    Product product = new Product();
+            while(result.next()) //while results set has a next result
+            {
+                Product product = new Product(); //create product bean
 
-                    product.setId(result.getInt("ID"));
-                    product.setPrice(result.getBigDecimal("PRICE"));
-                    product.setProduct(result.getString("PRODUCT"));
-                    product.setQuantity(result.getInt("QUANTITY"));
+                product.setId(result.getInt("ID"));//set id attribute
+                product.setPrice(result.getBigDecimal("PRICE"));//set price attribute
+                product.setProduct(result.getString("PRODUCT"));//set productname attribute
+                product.setQuantity(result.getInt("QUANTITY"));//set quantity attribute
 
-                    //store all data into a List
-                    list.add(product);
+                list.add(product);//add bean to list
             }
 
-            searchResult = list.get(0);
+            searchResult = list.get(0);//get 1 product from the list
         }
-        return "";
+        return "";//no page redirection
       //  return list;
     }
     
@@ -192,38 +178,36 @@ public class ProductBean implements Serializable{
         if(user.getIsAdmin() ==true)// protect against A7 Missing Function Level Access Control
         {
             if(ds==null)
-                throw new SQLException("Can't get data source");
+                    throw new SQLException("Can't get data source");//throw SQL connection if ds is null
 
             //get database connection
-            Connection con = dc.getConnection();
+            Connection con = dc.getConnection();//obtain connection to db
 
             if(con==null)
-                throw new SQLException("Can't get database connection");
+                    throw new SQLException("Can't get database connection");//throw SQL connection if connection is null
 
             //A1: Injection prevention using prepared statement
-            PreparedStatement ps = con.prepareStatement(
-                       "select * from app.products");
+            PreparedStatement ps = con.prepareStatement("select * from app.products"); //select all products in table
 
-            //get customer data from database
-            ResultSet result =  ps.executeQuery();
+            ResultSet result =  ps.executeQuery();//execute query
 
             List<Product> list = new ArrayList<Product>();
 
-            while(result.next())
+            while(result.next()) //while results set has a next result
             {
-                Product product = new Product();
+                Product product = new Product(); //create product bean
 
-                product.setId(result.getInt("ID"));
-                product.setPrice(result.getBigDecimal("PRICE"));
-                product.setProduct(result.getString("PRODUCT"));
-                product.setQuantity(result.getInt("QUANTITY"));
+                product.setId(result.getInt("ID"));//set id attribute
+                product.setPrice(result.getBigDecimal("PRICE"));//set price attribute
+                product.setProduct(result.getString("PRODUCT"));//set productname attribute
+                product.setQuantity(result.getInt("QUANTITY"));//set quantity attribute
 
-                //store all data into a List
-                list.add(product);
+                list.add(product);//add bean to list
             }
             return list;
         }
-        else{
+        else //else user is not an admin
+        {
             FacesContext.getCurrentInstance().addMessage(
                                     null,
                                     new FacesMessage(FacesMessage.SEVERITY_WARN,
@@ -235,13 +219,12 @@ public class ProductBean implements Serializable{
 
     
     /**
-     * 
-     * @param user
+     * Allows admin to update quantity of product
+     * @param user used to verify if admin
      * @return 
      */
     public String updateQuantity(Login user)
     {
-
         Connection con = null;
         PreparedStatement ps = null;
 
@@ -253,22 +236,18 @@ public class ProductBean implements Serializable{
 
                 for (Product p: productList)
                 {
-                    con = DataConnect.getConnection();
-                    con.setAutoCommit(true);
+                    con = DataConnect.getConnection();//get connection to db
+                    con.setAutoCommit(true);//set auto commit true
                     //A1: Injection prevention using prepared statement
-                    ps = con.prepareStatement("UPDATE APP.PRODUCTS SET QUANTITY = ? WHERE ID = ?");
+                    ps = con.prepareStatement("UPDATE APP.PRODUCTS SET QUANTITY = ? WHERE ID = ?");//update the quantity where id = ?
 
-                    System.out.println("testing 1");
-                    System.out.println("quantityParam = " + quantityParam);
-                    System.out.println("id Param = " + idParam);
-
-                    if(p.getId().equals(Integer.parseInt(idParam)))
+                    if(p.getId().equals(Integer.parseInt(idParam)))//if the id of product in the list is the same as the one provided by user
                     {
-                        int updateQuantity = Integer.parseInt(quantityParam);
-                        ps.setInt(1, updateQuantity);
-                        ps.setInt(2, p.getId());
-                        ps.execute();
-                        con.commit();
+                        int updateQuantity = Integer.parseInt(quantityParam);//convert string to int
+                        ps.setInt(1, updateQuantity);//set param for query
+                        ps.setInt(2, p.getId());//set param for query
+                        ps.execute();//execute statement
+                        con.commit();//commit changes to db
                     }
                 }  
             }
@@ -276,24 +255,24 @@ public class ProductBean implements Serializable{
                 e.printStackTrace();
             }
         }
-        else{
+        else //else user is not an admin
+        {
             FacesContext.getCurrentInstance().addMessage(
                                     null,
                                     new FacesMessage(FacesMessage.SEVERITY_WARN,
                                                     "Missing Function Level Access Control Prevention!",
                                                     ""));
         }
-        return "";
+        return "";//no page redirection
     }
-    
-        
+       
     /**
-     * 
-     * @param user
+     * Allows admin to add new product to database
+     * @param user used to determine if admin
      * @return 
      */
-    public String addNewProduct(Login user){
-        
+    public String addNewProduct(Login user)
+    {   
         Connection con = null;
         PreparedStatement ps = null;
 
@@ -304,23 +283,22 @@ public class ProductBean implements Serializable{
                 List<Product> productList = getProductList();
 
                 for (Product p: productList)
-                {
-                    con = DataConnect.getConnection();
-                    con.setAutoCommit(true);
-                    //A1: Injection prevention using prepared statement
-                    ps = con.prepareStatement("INSERT INTO APP.PRODUCTS (ID, PRODUCT, QUANTITY, PRICE) VALUES (?,?,?,?)");
+                {              
+                    con = DataConnect.getConnection();//get connection to db
+                    con.setAutoCommit(true);//set auto commit true
+                   
+                    ps = con.prepareStatement("INSERT INTO APP.PRODUCTS (ID, PRODUCT, QUANTITY, PRICE) VALUES (?,?,?,?)"); //A1: Injection prevention using prepared statement
 
                     int id = Integer.parseInt(idParam);
-                    ps.setInt(1, id);
-                    ps.setString(2, nameParam);
-                    ps.setInt(3, Integer.parseInt(quantityParam));
-                    //int value = Integer.parseInt(priceParam);
+                    ps.setInt(1, id);//set id param
+                    ps.setString(2, nameParam);//set name param
+                    ps.setInt(3, Integer.parseInt(quantityParam));//set quantity param
                     double val = Double.parseDouble(priceParam);
-                    ps.setDouble(4, val);
+                    ps.setDouble(4, val);//set price param
                     ps.execute();
                     con.commit();   
 
-                    logger.info("Product : " + nameParam + " added to inventory");
+                    logger.info("Product : " + nameParam + " added to inventory");//update log of added item event
                 }  
             }
             catch(Exception e){
@@ -334,13 +312,13 @@ public class ProductBean implements Serializable{
                                                     "A7: Missing Function Level Access Control Prevention!",
                                                     ""));
         }
-        return "";
+        return "";//no page redirection
     }
     
-    /***
-     * 
-     * @param removed
-     * @param user
+    /**
+     * Allow admin to remove products from database
+     * @param removed product to be removed
+     * @param user used to verify if is admin
      * @return 
      */
     public String removeProduct(Product removed, Login user)
@@ -352,18 +330,17 @@ public class ProductBean implements Serializable{
         {
             try
             {
-                con = DataConnect.getConnection();
-                con.setAutoCommit(true);
+                con = DataConnect.getConnection();//get connection to db
+                con.setAutoCommit(true);//set auto commit true
                 //A1: Injection prevention using prepared statement
-                ps = con.prepareStatement("DELETE FROM APP.PRODUCTS WHERE ID =?");
+                ps = con.prepareStatement("DELETE FROM APP.PRODUCTS WHERE ID =?");//delete product with matching id user provided
 
-                int id = removed.getId();
-                ps.setInt(1, id);     
-                ps.execute();
-                con.commit();   
+                int id = removed.getId();//get id from selected product
+                ps.setInt(1, id);//set param
+                ps.execute();//execute statement
+                con.commit();//commit changes to database
 
-                logger.info("Product : " + removed.getProduct() + " removed from inventory");
-
+                logger.info("Product : " + removed.getProduct() + " removed from inventory");//update log of removed item event
             }
             catch(Exception e){
                 e.printStackTrace();
@@ -377,7 +354,7 @@ public class ProductBean implements Serializable{
                                                     ""));
         }
         
-        return "";
+        return "";//no page redirection
     }
     
     
@@ -431,5 +408,10 @@ public class ProductBean implements Serializable{
     public void setPriceParam(String priceParam) {
         this.priceParam = priceParam;
     } 
+    
+     public void test(){
+        System.out.println("TESTING product bean");
+    }
+
     
 }
