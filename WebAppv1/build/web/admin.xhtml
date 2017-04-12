@@ -9,7 +9,7 @@
 </h:head>
 <h:body>
 	<h:form>
-		<p>You are logged in as admin #{login.user}</p>
+		<p>You are logged in as admin #{login.user}</p><!--Implicit escape-->
 		<h:commandLink action="#{login.logout}" value="logout"></h:commandLink>
 	</h:form>
     
@@ -24,34 +24,37 @@
                         <f:facet name="header">
                                 Product ID
                         </f:facet>
-                                #{p.id}
+                     <p> #{p.id} </p><!--Implicit escape-->   
+                                
                 </h:column>
 
                 <h:column>
                         <f:facet name="header">
                                 product
-                                </f:facet>
-                                #{p.product}
+                        </f:facet>
+                        <p>  #{p.product} </p><!--Implicit escape-->   
+                               
                 </h:column>
 
                         <h:column>
                         <f:facet name="header">
                                 quantity
-                                </f:facet>
-                                #{p.quantity}
+                        </f:facet>
+                        <p>   #{p.quantity} </p><!--Implicit escape-->  
+                               
                 </h:column>
 
                 <h:column>
                         <f:facet name="header">
                                 price
-                                </f:facet>
-                                #{p.price}
+                        </f:facet>
+                        <p>  #{p.price} </p><!--Implicit escape-->                   
                 </h:column>
                     
                 <h:column>
                     <f:facet name="header">Delete</f:facet>     
                     <h:commandButton value ="delete"
-                                     action="#{product.removeProduct(p)}"/>
+                                     action="#{product.removeProduct(p,login)}"/>
                 </h:column>
 
             </h:dataTable>
@@ -68,17 +71,17 @@
                 
                 <f:facet name="header">
                                 Product ID
-                        </f:facet>
+                </f:facet>
                                 Product ID
                                 
                 <h:inputText id="param0" value="#{product.idParam}"></h:inputText> 
                 
                 <f:facet name="header">
                                 quantity
-                        </f:facet>
+                </f:facet>
                                 quantity
                 <h:inputText id="param1" value="#{product.quantityParam}"></h:inputText>
-                <h:commandButton action="#{product.updateQuantity()}"
+                <h:commandButton action="#{product.updateQuantity(login)}"
 			value="update quantity"></h:commandButton>
             </h:form>
             
@@ -115,7 +118,7 @@
                     <f:facet name="header">Add</f:facet>
                     Add
                     <h:commandButton value ="Add"
-                                     action="#{product.addNewProduct()}"/>
+                                     action="#{product.addNewProduct(login)}"/>
                 </h:column>            
             
         </h:form>

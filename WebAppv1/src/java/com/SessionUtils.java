@@ -9,6 +9,12 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+
+/**
+ * SessionUtils used to obtain a session for each user logged through the getUserId method 
+ * thereby associating a session id to a particular user id.
+ * @author tom
+ */
 public class SessionUtils {
 
 	public static HttpSession getSession() {
@@ -17,6 +23,12 @@ public class SessionUtils {
 	}
 
 	public static HttpServletRequest getRequest() {
+            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance()
+				.getExternalContext().getRequest();
+            
+            String requestStr = request.toString();
+            //String headerrequest.getHeader(requestStr)   
+            System.out.println("GET REQUEST :\n" + requestStr);
 		return (HttpServletRequest) FacesContext.getCurrentInstance()
 				.getExternalContext().getRequest();
 	}

@@ -7,8 +7,8 @@
 </h:head>
 <h:body>
 	<h:form>
-		<h3>JSF Login index </h3>
-		<h:outputText value="Username" />
+		<h3>JSF Login login</h3>
+		<h:outputText value="Username" escape="true" />
 		<h:inputText id="username" value="#{login.user}"></h:inputText>
 		<h:message for="username"></h:message>
 		<br></br><br></br>
@@ -31,8 +31,6 @@
 			value="test cart"></h:commandButton>
 	</h:form>
 </h:body>
-    
-    <h:link outcome="profile" value="View profile"/>
 
 </html>
 

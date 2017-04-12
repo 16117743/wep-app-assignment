@@ -8,15 +8,11 @@
     <h:body>
         
         <h1>Checkout</h1>
-        <p>Your checkout was #{sc.checkout}</p>
+        <p>Your checkout was a #{sc.checkout}</p>
         
         <br></br>
         
         <h:form>
-            <h:commandButton value="Shop"
-                         action="shop"/>
-        
-            <br></br>
 
             <h:commandButton value="Cancel order"
                              action="#{sc.cancelOrder(login.user)}"/>

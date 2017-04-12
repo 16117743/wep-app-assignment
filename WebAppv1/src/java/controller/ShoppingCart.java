@@ -106,7 +106,8 @@ public class ShoppingCart implements Serializable {
         }
     }
     
-    public String checkout(){
+    public String checkout()
+    {
         Connection con = null;
         PreparedStatement ps = null;
 
@@ -114,10 +115,10 @@ public class ShoppingCart implements Serializable {
         {
             con = DataConnect.getConnection();
             con.setAutoCommit(false);
-            //ps = con.prepareStatement("UPDATE APP.PRODUCTS SET QUANTITY = ? WHERE ID = ?");
             
             for(Item item : cart)
             {
+                //A1: Injection prevention using prepared statement
                 ps = con.prepareStatement("select * from app.products where ID = ?");           
                 ps.setInt(1, item.getP().getId());        
 		ResultSet result =  ps.executeQuery();
@@ -136,12 +137,6 @@ public class ShoppingCart implements Serializable {
                 {      
                     try
                     {
-//                        ps = con.prepareStatement("UPDATE APP.PRODUCTS SET QUANTITY = ? WHERE ID = ?");
-//                        int updateQuantity = inStoreQuantity - item.getQuantity();
-//                        ps.setInt(1, updateQuantity);
-//                        ps.setInt(2, item.getP().getId());
-//                        ps.execute();
-//                        con.commit();
                         return "checkout";    
                     }
                     catch (Exception ex)
@@ -184,38 +179,39 @@ public class ShoppingCart implements Serializable {
         return "checkout";
     }
     
-    public Boolean validateQuantity(Item item){
+    public Boolean validateQuantity(Item item)
+    {
         Connection con = null;
         PreparedStatement ps = null;
         try
         {
-		if(ps==null)
-			throw new SQLException("Can't get data source");
+            if(ps==null)
+                    throw new SQLException("Can't get data source");
 
-		//get database connection
-		con = dc.getConnection();
+            //get database connection
+            con = dc.getConnection();
 
-		if(con==null)
-			throw new SQLException("Can't get database connection");
+            if(con==null)
+                    throw new SQLException("Can't get database connection");
 
-		ps = con.prepareStatement("select * from app.products where ID = ?");
+            ps = con.prepareStatement("select * from app.products where ID = ?");
 
-		//get customer data from database 
-                ps.setInt(1, item.getP().getId());
-                        
-		ResultSet result =  ps.executeQuery();
+            //get customer data from database 
+            ps.setInt(1, item.getP().getId());
 
-		List<Product> list = new ArrayList<Product>();
+            ResultSet result =  ps.executeQuery();
 
-                int quantity = -1;
-		while(result.next()){
-                    quantity =  result.getInt("QUANTITY");
-		}
-                
-                if(quantity < item.getQuantity())
-                    return true;
-                else
-                    return false;
+            List<Product> list = new ArrayList<Product>();
+
+            int quantity = -1;
+            while(result.next()){
+                quantity =  result.getInt("QUANTITY");
+            }
+
+            if(quantity < item.getQuantity())
+                return true;
+            else
+                return false;
         }
         catch (SQLException ex) {
                     System.out.println("validateQuantity error -->" + ex.getMessage());
@@ -233,7 +229,8 @@ public class ShoppingCart implements Serializable {
         return "cancelorder";
     }
     
-    public String confirmOrder(String customer){
+    public String confirmOrder(String customer)
+    {
         logger.info("User : confirmed order ");
         
         Connection con = null;
@@ -243,6 +240,7 @@ public class ShoppingCart implements Serializable {
         {
             con = DataConnect.getConnection();
             con.setAutoCommit(true);
+            //A1: Injection prevention using prepared statement
             ps = con.prepareStatement("INSERT INTO APP.ORDERS (CUSTOMER, COST, ORDERID) VALUES (?,?,?)");
 
             ps.setString(1, customer);

@@ -14,12 +14,12 @@
             
                 <h:column>
                     <f:facet name="header">Product</f:facet>
-                    #{i.p.product}
+                    <p> #{i.p.product}</p><!--Implicit escape-->         
                 </h:column>
                 
                 <h:column>
                     <f:facet name="header">Price</f:facet>
-                    $#{i.p.price}
+                    <p> $#{i.p.price} </p><!--Implicit escape-->   
                 </h:column>
                 
                 <h:column>
@@ -35,22 +35,15 @@
                                      action="#{sc.remove(i)}"/>
                 </h:column>
                 
-                <f:facet name="footer">Total: $#{sc.total}</f:facet>
-                
+                <f:facet name="footer">Total: </f:facet>
+                <p> $#{sc.total} </p><!--Implicit escape-->   
             </h:dataTable>
-            
-            <br></br>
-            <h:commandButton value="Update"
-                             action="#{sc.update}"/>
             
             <br></br>
             
             <h:commandButton value="Checkout"
                              action="#{sc.checkout()}"/>
-            
-            <br></br>
-            
-            
+            <br></br>     
         </h:form>
         <h:link outcome="shop" value="Continue shopping"/>
         

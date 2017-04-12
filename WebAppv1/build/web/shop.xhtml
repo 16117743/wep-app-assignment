@@ -14,7 +14,7 @@
     	<h1>Shop</h1>
         
         <h:form>
-		<p>You are logged in as shop user #{login.user}</p>
+		<p>You are logged in as shop user #{login.user}</p>  <!--Implicit escape-->
 		<h:commandLink action="#{login.logout}" value="logout"></h:commandLink>
 	</h:form>
 
@@ -29,28 +29,32 @@
                         <f:facet name="header">
                                 Product ID
                         </f:facet>
-                                #{p.id}
+                        <p>  #{p.id} </p><!--Implicit escape-->
+                               
                 </h:column>
 
                 <h:column>
                         <f:facet name="header">
                                 product
-                                </f:facet>
-                                #{p.product}
+                        </f:facet>
+                        <p>  #{p.product} </p><!--Implicit escape-->
+                                
                 </h:column>
 
                         <h:column>
                         <f:facet name="header">
                                 quantity
-                                </f:facet>
-                                #{p.quantity}
+                        </f:facet>
+                        <p>  #{p.quantity} </p><!--Implicit escape-->
+                                
                 </h:column>
 
                 <h:column>
                         <f:facet name="header">
                                 price
-                                </f:facet>
-                                #{p.price}
+                        </f:facet>
+                        <p>   #{p.price} </p><!--Implicit escape-->
+                               
                 </h:column>
              
                 <h:column>
@@ -87,28 +91,32 @@
                         <f:facet name="header">
                                 Product ID
                         </f:facet>
-                                #{p.id}
+                        <p>   #{p.id}</p><!--Implicit escape-->
+                                
                 </h:column>
 
                 <h:column>
                         <f:facet name="header">
                                 product
-                                </f:facet>
-                                #{p.product}
+                        </f:facet>
+                        <p>  #{p.product} </p><!--Implicit escape-->
+                                
                 </h:column>
 
                         <h:column>
                         <f:facet name="header">
                                 quantity
-                                </f:facet>
-                                #{p.quantity}
+                        </f:facet>
+                        <p>  #{p.quantity} </p><!--Implicit escape-->
+                                
                 </h:column>
 
                 <h:column>
                         <f:facet name="header">
                                 price
-                                </f:facet>
-                                #{p.price}
+                        </f:facet>
+                        <p>  #{p.price} </p><!--Implicit escape-->
+                                
                 </h:column>
 
             </h:dataTable>
@@ -118,7 +126,7 @@
         
         <br></br><br></br>
         
-        <h:link outcome="cart" value="shopping cart"/>
+        <h:link outcome="cart" value="View shopping cart"/>
         
     </h:body>
 

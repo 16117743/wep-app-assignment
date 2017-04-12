@@ -11,31 +11,31 @@
         <br></br><br></br>
 
         <h:form>
-                <h:dataTable value="#{profileBean.getProfileList()}" var="p"
+            <h:dataTable value="#{profileBean.getProfileList()}" var="p"
                     styleClass="order-table"
                     headerClass="order-table-header"
                     rowClasses="order-table-odd-row,order-table-even-row"
                     >
 
                 <h:column>
-                        <f:facet name="header">
-                                Profile ID
-                        </f:facet>
-                                #{p.id}
-                </h:column>
-
-                        <h:column>
-                        <f:facet name="header">
-                                Username
-                                </f:facet>
-                                #{p.name}
+                    <f:facet name="header">
+                        Profile ID
+                    </f:facet>
+                    <p>   #{p.id}</p><!--Implicit escape-->
                 </h:column>
 
                 <h:column>
-                        <f:facet name="header">
-                                Message
-                                </f:facet>
-                                #{p.msg}
+                    <f:facet name="header">
+                        Username
+                    </f:facet>
+                    <p> #{p.name} </p><!--Implicit escape-->                 
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                            Message
+                    </f:facet>
+                    <p>  #{p.msg} </p><!--Implicit escape-->                    
                 </h:column>
                     
             </h:dataTable>
@@ -62,24 +62,24 @@
                     >
 
                 <h:column>
-                        <f:facet name="header">
-                                Profile ID
-                        </f:facet>
-                                #{p.id}
+                    <f:facet name="header">
+                            Profile ID
+                    </f:facet>
+                    <p>   #{p.id}</p><!--Implicit escape-->
                 </h:column>
 
-                        <h:column>
-                        <f:facet name="header">
-                                Username
-                                </f:facet>
-                                #{p.name}
+                    <h:column>
+                    <f:facet name="header">
+                            Username
+                    </f:facet>   
+                    <p>  #{p.name}</p><!--Implicit escape-->
                 </h:column>
 
                 <h:column>
-                        <f:facet name="header">
-                                Message
-                                </f:facet>
-                                #{p.msg}
+                    <f:facet name="header">
+                            Message
+                            </f:facet>
+                    <p> #{p.msg}</p><!--Implicit escape-->                    
                 </h:column>
                     
             </h:dataTable>
